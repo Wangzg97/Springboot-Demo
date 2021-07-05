@@ -1,0 +1,50 @@
+server:
+  port: 8080 #应用服务 WEB 访问端口
+
+spring:
+  application:
+    name: mybatis-demo #应用名称
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver #数据库驱动
+    url: jdbc:mysql://localhost:23306/mybatis_demo?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root #数据库用户名
+    password: 123456 #数据库密码
+    druid:
+      initial-size: 5
+      min-idle: 10 #关掉多余连接，保留有效连接，节省数据库的资源，这个值根据应用实际情况调整
+      max-active: 20 #指的是连接池里允许的最大活跃连接数，这个值根据应用实际情况调整
+      max-wait: 60000 #指应用线程等待连接的超时。可以配几秒范围，根据业务应用实际情况进行判定
+      min-evictable-idle-time-millis: 300000
+      validation-query: select 1 #指的是连接池探测当前连接是否是健康的SQL语句。如果是较新的JDBC，不会发SQL语句，而 是发Ping命令
+      validation-query-timeout: 60 #指的就是探测超时的时间
+      test-while-idle: true #指的是控制当连接处于空闲状态时，是否需检测连接的健康状态。建议打开True
+      time-between-eviction-runs-millis: 600000 #指的是触发空闲连接健康探测阈值，需要跟上面的Test-while结合起来
+      test-on-borrow: false #指连接从连接池里取出时，连接池是否需要对连接进行健康探测。建议关闭False
+      test-on-return: false #建议关闭False
+      pool-prepared-statements: true
+      max-open-prepared-statements: 20
+      async-init: false
+      web-stat-filter:
+        enabled: true
+      stat-view-servlet:
+        enabled: true
+      remove-abandoned: false #泄露连接强制回收，默认是False关闭
+      remove-abandoned-timeout: 60 #指的是强制回收的触发时间阈值。配置时间不要太短，因为业务长时间使用连 接，所以超时时间要比业务实际合理时间要高。配置参数单位是“秒”
+      log-abandoned: false #指的是关闭被泄露连接时输出堆栈。当一个连接被探测为连接泄露且强制关闭的时候，是否要 在日志里面输出获取连接的线程的堆栈
+
+mybatis:
+  type-aliases-package: com.example.mybatisdemo.entity #实体类所在的包别名
+  mapper-locations: #配置扫描,指定Mybatis的Mapper文件
+    - classpath:mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启控制台打印sql
+    map-underscore-to-camel-case: true #下划线转驼峰配置
+
+pagehelper:
+  helper-dialect: mysql #数据库方言
+  reasonable: true #分页合理化,当该参数设置为 true 时，pageNum<=0 时会查询第一页，pageNum>pages（超过总数时），会查询最后一页。默认false 时，直接根据参数进行查询
+  page-size-zero: true #当设置为true的时候，如果pagesize设置为0（或RowBounds的limit=0），就不执行分页，返回全部结果
+  params: count=countSql #为了支持startPage(Object params)方法，增加了该参数来配置参数映射，用于从对象中根据属性名取值， 可以配置 pageNum,pageSize,count,pageSizeZero,reasonable，不配置映射的用默认值， 默认值为pageNum=pageNum;pageSize=pageSize;count=countSql;reasonable=reasonable;pageSizeZero=pageSizeZero
+  support-methods-arguments: true #是否支持Mapper 接口参数来传递分页参数，默认false。分页插件会从查询方法的参数值中，自动根据上面 params 配置的字段中取值，查找到合适的值时就会自动分页
+
+

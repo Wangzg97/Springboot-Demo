@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mybatisdemo.mapper.UserMapper">
+    <select id="queryAllUser" resultType="User">
+        select * from user
+    </select>
+
+    <insert id="addUser" parameterType="User">
+        insert into user(username, address) values(#{username}, #{address})
+    </insert>
+
+    <delete id="deleteUserByIds" parameterType="list">
+        delete from user where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
