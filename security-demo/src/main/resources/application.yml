@@ -1,0 +1,23 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: security-demo
+  security:
+    user:
+      name: user
+      password: 123456
+  redis:
+    host: 127.0.0.1
+    password: 123456
+    port: 26379
+
+custom:
+  jwt:
+    # 加密秘钥
+    secret: f4e2e52034348f86b67cde581c0f9eb5
+    # token有效时长，7天，单位秒
+    expire: 604800
+    header: Authorization
+
