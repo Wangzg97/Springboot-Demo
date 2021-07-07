@@ -1,6 +1,9 @@
 package com.example.securitydemo.security;
 
 import cn.hutool.core.util.StrUtil;
+import com.example.securitydemo.config.UserDetailsServiceImpl;
+import com.example.securitydemo.entity.SysUser;
+import com.example.securitydemo.service.SysUserService;
 import com.example.securitydemo.utils.JwtUtils;
 import com.example.securitydemo.utils.RedisUtil;
 import io.jsonwebtoken.Claims;
@@ -27,6 +30,10 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
     JwtUtils jwtUtils;
     @Autowired
     RedisUtil redisUtil;
+    @Autowired
+    SysUserService sysUserService;
+    @Autowired
+    UserDetailsServiceImpl userDetailsService;
 
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         super((authenticationManager));
@@ -49,7 +56,8 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
         }
         String username = claim.getSubject();
         log.info("用户-{}，正在登陆！", username);
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, null, new TreeSet<>());
+        SysUser sysUser = sysUserService.getByUsername(username);
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, null, userDetailsService.getUserAuthority(sysUser.getId()));
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
         chain.doFilter(request, response);
     }

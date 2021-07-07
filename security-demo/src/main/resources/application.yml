@@ -4,10 +4,10 @@ server:
 spring:
   application:
     name: security-demo
-  security:
-    user:
-      name: user
-      password: 123456
+#  security:
+#    user:
+#      name: user
+#      password: 123456
   redis:
     host: 127.0.0.1
     password: 123456

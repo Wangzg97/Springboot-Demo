@@ -30,6 +30,9 @@ public class AuthController {
         String code = producer.createText();
         String key = UUID.randomUUID().toString();
 
+        code = "code";
+        key = "key";
+
         BufferedImage img = producer.createImage(code);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ImageIO.write(img, "jpg", outputStream);
