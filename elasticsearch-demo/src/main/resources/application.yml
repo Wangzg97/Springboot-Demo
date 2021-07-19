@@ -1,0 +1,8 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: elasticsearch-demo
+  elasticsearch:
+    rest:
+      uris: 127.0.0.1:9200
